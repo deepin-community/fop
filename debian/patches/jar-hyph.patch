@@ -1,0 +1,19 @@
+Description: Only build jar-hyph, skip the rest
+ We are now using maven to build the source code, only use ant for a legacy
+ target which seems not to have been updated.
+Author: Mathieu Malaterre <malat@debian.org>
+Forwarded: yes, https://lists.debian.org/debian-java/2018/11/msg00041.html
+
+Index: fop/fop/build.xml
+===================================================================
+--- fop.orig/fop/build.xml
++++ fop/fop/build.xml
+@@ -466,7 +466,7 @@ list of possible build targets.
+   <!-- =================================================================== -->
+   <!-- compiles hyphenation patterns                                       -->
+   <!-- =================================================================== -->
+-  <target name="compile-hyphenation" depends="compile" description="Compiles the hyphenation pattern files">
++  <target name="compile-hyphenation" description="Compiles the hyphenation pattern files">
+     <path id="hyph-classpath">
+       <path refid="libs-build-classpath"/>
+       <pathelement location="${build.classes.dir}"/>

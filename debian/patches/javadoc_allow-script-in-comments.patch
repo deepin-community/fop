@@ -1,0 +1,19 @@
+Description: error: package javax.media.jai does not exist
+Author: Emmanuel Bourg <ebourg@apache.org>
+Origin: vendor, https://lists.debian.org/debian-java/2017/01/msg00015.html
+Bug-Debian: https://bugs.debian.org/852910
+Forwarded: not-needed
+Reviewed-By: Mathieu Malaterre <malat@debian.org>
+
+Index: fop/fop/build.xml
+===================================================================
+--- fop.orig/fop/build.xml
++++ fop/fop/build.xml
+@@ -906,6 +906,7 @@ NOTE:
+       bottom="Copyright ${year} The Apache Software Foundation. All Rights Reserved."
+       encoding="UTF-8" docencoding="UTF-8" charset="UTF-8"
+       overview="${src.java.dir}/org/apache/fop/overview.html"
++      additionalparam="--allow-script-in-comments"
+       maxmemory="256M">
+       <header><![CDATA[${name} ${version}]]></header>
+       <footer><![CDATA[${name} ${version}]]></footer>

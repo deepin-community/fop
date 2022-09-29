@@ -1,0 +1,25 @@
+Description: Maven: Skip compilation of source file if artifactId missing
+Author: Emmanuel Bourg <ebourg@apache.org>
+Forwarded: no
+Reviewed-By: Mathieu Malaterre <malat@debian.org>
+Last-Update: 2018-11-12
+
+Index: fop/fop-core/pom.xml
+===================================================================
+--- fop.orig/fop-core/pom.xml
++++ fop/fop-core/pom.xml
+@@ -285,6 +285,14 @@
+           </execution>
+         </executions>
+       </plugin>
++      <plugin>
++	      <artifactId>maven-compiler-plugin</artifactId>
++	      <configuration>
++		      <excludes>
++			      <exclude>**/JAI*.java</exclude>
++		      </excludes>
++	      </configuration>
++      </plugin>
+       <!-- junit testing -->
+       <plugin>
+         <artifactId>maven-surefire-plugin</artifactId>

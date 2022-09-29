@@ -1,0 +1,58 @@
+Description: Strip user and host from MANIFEST
+ Strip user, host and os variables from MANIFEST.MF, to make the build
+ reproducible.
+Author: Alexis Bienvenüe <pado@passoire.fr>
+
+Index: fop/fop/build.xml
+===================================================================
+--- fop.orig/fop/build.xml
++++ fop/fop/build.xml
+@@ -501,7 +501,7 @@ list of possible build targets.
+         <attribute name="Implementation-Title" value="${Name}"/>
+         <attribute name="Implementation-Version" value="${version}"/>
+         <attribute name="Implementation-Vendor" value="The Apache Software Foundation (http://xmlgraphics.apache.org/fop/)"/>
+-        <attribute name="Build-Id" value="${ts} (${user.name} [${os.name} ${os.version} ${os.arch}, Java ${java.runtime.version}, Target Java ${javac.target}])"/>
++        <attribute name="Build-Id" value="${ts} (Java ${java.runtime.version}, Target Java ${javac.target})"/>
+       </manifest>
+     </jar>
+   </target>
+@@ -523,7 +523,7 @@ list of possible build targets.
+     <jar jarfile="${build.dir}/fop.jar">
+       <manifest>
+         <attribute name="Main-Class" value="org.apache.fop.cli.Main"/>
+-        <attribute name="Build-Id" value="${ts} (${user.name} [${os.name} ${os.version} ${os.arch}, Java ${java.runtime.version}, Target Java ${javac.target}])"/>
++        <attribute name="Build-Id" value="${ts} (Java ${java.runtime.version}, Target Java ${javac.target})"/>
+         <section name="org/apache/fop/">
+           <attribute name="Specification-Title" value="XSL-FO - Extensible Stylesheet Language"/>
+           <attribute name="Specification-Version" value="1.1"/>
+@@ -552,7 +552,7 @@ list of possible build targets.
+     </tstamp>
+     <jar jarfile="${build.dir}/fop-sandbox.jar" basedir="${build.sandbox-classes.dir}">
+       <manifest>
+-        <attribute name="Build-Id" value="${ts} (${user.name} [${os.name} ${os.version} ${os.arch}, Java ${java.runtime.version}, Target Java ${javac.target}])"/>
++        <attribute name="Build-Id" value="${ts} (Java ${java.runtime.version}, Target Java ${javac.target})"/>
+       </manifest>
+       <metainf dir="${basedir}/.." includes="LICENSE,NOTICE"/>
+     </jar>
+@@ -985,7 +985,7 @@ NOTE:
+   <target name="jar-javadocs" depends="javadocs" description="Generates a jar file containing the Javadocs">
+     <jar jarfile="${build.dir}/${name}-${version}-javadoc.jar">
+       <manifest>
+-        <attribute name="Build-Id" value="${ts} (${user.name} [${os.name} ${os.version} ${os.arch}, Java ${java.runtime.version}, Target Java ${javac.target}])"/>
++        <attribute name="Build-Id" value="${ts} (Java ${java.runtime.version}, Target Java ${javac.target})"/>
+       </manifest>
+       <fileset dir="${build.javadocs.dir}"/>
+       <metainf dir="${basedir}/.." includes="LICENSE,NOTICE"/>
+Index: fop/fop/examples/plan/build.xml
+===================================================================
+--- fop.orig/fop/examples/plan/build.xml
++++ fop/fop/examples/plan/build.xml
+@@ -133,7 +133,7 @@
+         <attribute name="Implementation-Title" value="${Name}"/>
+         <attribute name="Implementation-Version" value="${version}"/>
+         <attribute name="Implementation-Vendor" value="Apache Software Foundation (http://xmlgraphics.apache.org/fop/)"/>
+-        <attribute name="Build-Id" value="${ts} (${user.name} [${os.name} ${os.version} ${os.arch}])"/>
++        <attribute name="Build-Id" value="${ts}"/>
+     </manifest>
+     </jar>
+   </target>

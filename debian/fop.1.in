@@ -1,0 +1,41 @@
+[NAME]
+fop \- Command line wrapper for the java version of fop.
+
+[DESCRIPTION]
+Apache FOP (Formatting Objects Processor) is a print formatter driven by XSL
+formatting objects (XSL-FO) and an output independent formatter. It is a Java
+application that reads a formatting object (FO) tree and renders the resulting
+pages to a specified output. Output formats currently supported include PDF,
+PS, PCL, AFP, XML (area tree representation), Print, AWT and PNG, and to a
+lesser extent, RTF and TXT. The primary output target is PDF.
+
+[HYPHENATION]
+fop can make use of external hyphenation rules that can be supplied in
+the form of a \fBhyphenation jar\fR. You can find such a one at
+\fIhttp://offo.sourceforge.net/\fR.
+
+To actually use that, set the \fBFOP_HYPHENATION_PATH\fR environment variable
+to the full path of this file, or use configuration files, see below.
+
+[CONFIGURATION FILES]
+fop reads two configuration files on startup: \fI/etc/fop.conf\fR and
+\fI$HOME/.foprc\fR. These are plain shell script files where you can define
+for instance the \fBFOP_HYPHENATION_PATH\fR variable.
+
+Another way to extend is \fIconf.d/\fR files. Simply add a configuration file
+into \fI/etc/fop.conf.d/my.conf\fR.
+
+[JAVA-WRAPPERS NOTE]
+This program is a shell script wrapper based on \fBjava-wrappers(7)\fR. You
+therefore benefit from several features; please see the \fBjava-wrappers(7)\fR
+manual page for more information about them.
+
+[AUTHOR]
+Wrapper author: Ola Lundqvist <opal@debian.org>
+
+This manual page was written by Mathieu Malaterre <malat@debian.org>,
+for the Debian project (and may be used by others).
+
+[SEE ALSO]
+.BR fop-ttfreader(1),
+.BR java-wrappers(7).

@@ -1,0 +1,27 @@
+Description: Remove dust about avalon-framework
+Author: Mathieu Malaterre <malat@debian.org>
+Forwarded: https://issues.apache.org/jira/browse/FOP-2733?focusedCommentId=17052100&page=com.atlassian.jira.plugin.system.issuetabpanels%3Acomment-tabpanel#comment-17052100
+Last-Update: 2020-03-05
+
+--- fop-2.4.orig/fop/examples/hyphenation/analyse.cmd
++++ fop-2.4/fop/examples/hyphenation/analyse.cmd
+@@ -47,7 +47,6 @@ set LOCALCLASSPATH=%LOCALCLASSPATH%;%LIB
+ set LOCALCLASSPATH=%LOCALCLASSPATH%;%LIBDIR%\xalan-2.7.0.jar
+ set LOCALCLASSPATH=%LOCALCLASSPATH%;%LIBDIR%\serializer-2.7.0.jar
+ set LOCALCLASSPATH=%LOCALCLASSPATH%;%LIBDIR%\batik-all-1.6.jar
+-set LOCALCLASSPATH=%LOCALCLASSPATH%;%LIBDIR%\avalon-framework-4.2.0.jar
+ set LOCALCLASSPATH=%LOCALCLASSPATH%;%LIBDIR%\commons-io-1.1.jar
+ set LOCALCLASSPATH=%LOCALCLASSPATH%;%LIBDIR%\commons-logging-1.0.4.jar
+ set LOCALCLASSPATH=%LOCALCLASSPATH%;%LIBDIR%\jimi-1.0.jar
+--- fop-2.4.orig/fop/test/createpdf.sh
++++ fop-2.4/fop/test/createpdf.sh
+@@ -1,7 +1,7 @@
+ # this can be used to create pdf output of the testsuite files
+ 
+-$JAVA_HOME/bin/java -cp ../build/fop.jar:../lib/batik.jar:../lib/xalan-2.0.0.jar:../lib/xerces-1.2.3.jar:../lib/avalon-framework-4.0.jar:../lib/logkit-1.0b4.jar:../lib/jimi-1.0.jar org.apache.fop.tools.TestConverter -pdf -b ./ basictests.xml
++$JAVA_HOME/bin/java -cp ../build/fop.jar:../lib/batik.jar:../lib/xalan-2.0.0.jar:../lib/xerces-1.2.3.jar:../lib/logkit-1.0b4.jar:../lib/jimi-1.0.jar org.apache.fop.tools.TestConverter -pdf -b ./ basictests.xml
+ 
+-$JAVA_HOME/bin/java -cp ../build/fop.jar:../lib/batik.jar:../lib/xalan-2.0.0.jar:../lib/xerces-1.2.3.jar:../lib/avalon-framework-4.0.jar:../lib/logkit-1.0b4.jar:../lib/jimi-1.0.jar org.apache.fop.tools.TestConverter -pdf -b ./ bugtests.xml
++$JAVA_HOME/bin/java -cp ../build/fop.jar:../lib/batik.jar:../lib/xalan-2.0.0.jar:../lib/xerces-1.2.3.jar:../lib/logkit-1.0b4.jar:../lib/jimi-1.0.jar org.apache.fop.tools.TestConverter -pdf -b ./ bugtests.xml
+ 
+ 

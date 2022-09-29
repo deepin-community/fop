@@ -1,0 +1,17 @@
+fop
+---
+
+The variables:
+
+HEADLESS= # -Djava.awt.headless=true
+LOGCHOICE= # -Dorg.apache.commons.logging.Log=org.apache.commons.logging.impl.SimpleLog
+
+LOGLEVEL= # -Dorg.apache.commons.logging.simplelog.defaultlog=INFO
+
+Can be overridden by user, using either:
+
+A file such as: /etc/fop.conf.d/*.conf
+
+or directly: $HOME/.foprc
+
+ -- Mathieu Malaterre <malat@debian.org>  Tue, 02 Feb 2016 08:30:40 +0100

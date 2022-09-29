@@ -1,0 +1,16 @@
+Description: Set javadoc output encoding to UTF-8
+ Set javadoc output encoding to UTF-8, to make the build reproducible.
+Author: Alexis Bienvenüe <pado@passoire.fr>
+
+Index: fop/fop/build.xml
+===================================================================
+--- fop.orig/fop/build.xml
++++ fop/fop/build.xml
+@@ -904,6 +904,7 @@ NOTE:
+       windowtitle="${Name} ${version} API"
+       doctitle="Apache Formatting Objects Processor (FOP)"
+       bottom="Copyright ${year} The Apache Software Foundation. All Rights Reserved."
++      encoding="UTF-8" docencoding="UTF-8" charset="UTF-8"
+       overview="${src.java.dir}/org/apache/fop/overview.html"
+       maxmemory="256M">
+       <header><![CDATA[${name} ${version}]]></header>

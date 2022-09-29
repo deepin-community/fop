@@ -1,0 +1,110 @@
+Author: Vagrant Cascadian <vagrant@reproducible-builds.org>
+        tony mancill <tmancill@debian.org>
+Description: Use SOURCE_DATE_EPOCH environment variable when set instead of
+ current system time to enable reproducible generation of PDF documents.
+ If you desire the previous behavior, either unset SOURCE_DATE_EPOCH or
+ overwrite it to a non-integer value.
+ Also see: https://reproducible-builds.org/docs/source-date-epoch/
+Forwarded: not-needed
+Last-Update: 2020-12-31
+Bug-Debian: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=978499
+
+--- a/fop-core/src/main/java/org/apache/fop/pdf/PDFInfo.java
++++ b/fop-core/src/main/java/org/apache/fop/pdf/PDFInfo.java
+@@ -305,9 +305,29 @@
+      * @return the requested String representation
+      */
+     protected static String formatDateTime(final Date time) {
++        final Date sourceDateEpoch = getSourceDateEpoch();
++        if (sourceDateEpoch != null) {
++            return formatDateTime(sourceDateEpoch, TimeZone.getTimeZone("Etc/UTC"));
++        }
+         return formatDateTime(time, TimeZone.getDefault());
+     }
+ 
++    /** @return a Date initialized from SOURCE_DATE_EPOCH or null if not set */
++    public static Date getSourceDateEpoch() {
++        // https://reproducible-builds.org/docs/source-date-epoch/
++        // https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=978499
++        final String sourceDateEpochString = System.getenv("SOURCE_DATE_EPOCH");
++        if (sourceDateEpochString != null) {
++            try {
++                final Long sourcedate = (1000 * Long.parseLong(sourceDateEpochString));
++                return new Date(sourcedate);
++            } catch (NumberFormatException ignored) {
++                // ignored
++            }
++        }
++        return null;
++    }
++
+     /**
+      * Adds a custom property to this Info dictionary.
+      */
+--- a/fop-core/src/main/java/org/apache/fop/pdf/PDFMetadata.java
++++ b/fop-core/src/main/java/org/apache/fop/pdf/PDFMetadata.java
+@@ -134,8 +134,12 @@
+ 
+         //Set creation date if not available, yet
+         if (info.getCreationDate() == null) {
+-            Date d = new Date();
+-            info.setCreationDate(d);
++            final Date sourceDateEpoch = PDFInfo.getSourceDateEpoch();
++            if (sourceDateEpoch != null) {
++                info.setCreationDate(sourceDateEpoch);
++            } else {
++                info.setCreationDate(new Date());
++            }
+         }
+ 
+         //Important: Acrobat 7's preflight check for PDF/A-1b wants the creation date in the Info
+--- a/fop-core/src/main/java/org/apache/fop/render/pdf/PDFRenderingUtil.java
++++ b/fop-core/src/main/java/org/apache/fop/render/pdf/PDFRenderingUtil.java
+@@ -259,8 +259,14 @@
+         }
+         fopXMP.mergeInto(docXMP, exclude);
+         XMPBasicAdapter xmpBasic = XMPBasicSchema.getAdapter(docXMP);
+-        //Metadata was changed so update metadata date
+-        xmpBasic.setMetadataDate(new java.util.Date());
++        //Metadata was changed so potentially update metadata date
++        final Date sourceDateEpoch = PDFInfo.getSourceDateEpoch();
++        if (sourceDateEpoch != null) {
++            xmpBasic.setMetadataDate(sourceDateEpoch);
++        } else {
++            xmpBasic.setMetadataDate(new Date());
++        }
++
+         PDFMetadata.updateInfoFromMetadata(docXMP, pdfDoc.getInfo());
+ 
+         PDFMetadata pdfMetadata = pdfDoc.getFactory().makeMetadata(
+@@ -478,7 +484,13 @@
+                 augmentDictionary((PDFDictionary)currentPage.get("DPart"), extension);
+             }
+         } else if (type == PDFDictionaryType.PagePiece) {
+-            String date = DateFormatUtil.formatPDFDate(new Date(), TimeZone.getDefault());
++            final Date sourceDateEpoch = PDFInfo.getSourceDateEpoch();
++            final String date;
++            if (sourceDateEpoch != null) {
++                date = DateFormatUtil.formatPDFDate(sourceDateEpoch, TimeZone.getTimeZone("Etc/UTC"));
++            } else {
++                date = DateFormatUtil.formatPDFDate(new Date(), TimeZone.getDefault());
++            }
+             if (currentPage.get("PieceInfo") == null) {
+                 currentPage.put("PieceInfo", new PDFDictionary());
+                 currentPage.put("LastModified", date);
+--- a/fop-core/src/main/java/org/apache/fop/pdf/FileIDGenerator.java
++++ b/fop-core/src/main/java/org/apache/fop/pdf/FileIDGenerator.java
+@@ -86,7 +86,12 @@
+ 
+         private void generateFileID() {
+             DateFormat df = new SimpleDateFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SSS");
+-            digest.update(PDFDocument.encode(df.format(new Date())));
++            final Date sourceDateEpoch = PDFInfo.getSourceDateEpoch();
++            if (sourceDateEpoch != null) {
++                digest.update(PDFDocument.encode(df.format(sourceDateEpoch)));
++            } else {
++                digest.update(PDFDocument.encode(df.format(new Date())));
++            }
+             // Ignoring the filename here for simplicity even though it's recommended
+             // by the PDF spec
+             digest.update(PDFDocument.encode(String.valueOf(document.getCurrentFileSize())));

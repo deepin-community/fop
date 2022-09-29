@@ -1,0 +1,97 @@
+From: Markus Koschany <apo@debian.org>
+Date: Mon, 30 Apr 2018 22:33:18 +0200
+Subject: java9
+
+Fix FTBFS with Java 9.
+
+Bug-Debian: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=893150
+Forwarded: no
+---
+ build.xml | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
+
+Index: fop/fop/build.xml
+===================================================================
+--- fop.orig/fop/build.xml
++++ fop/fop/build.xml
+@@ -247,7 +247,7 @@ list of possible build targets.
+       debug="${javac.debug}"
+       deprecation="${javac.deprecation}"
+       optimize="${javac.optimize}"
+-      source="${javac.source}" target="${javac.target}"/>
++      source="${javac.source}" target="${javac.target}" encoding="utf-8" />
+   </presetdef>
+   
+   <presetdef name="junit">
+@@ -348,7 +348,7 @@ list of possible build targets.
+   <target name="compile-java" depends="init, codegen">
+ <!-- create directories -->
+     <mkdir dir="${build.classes.dir}"/>
+-    <javac destdir="${build.classes.dir}" includeAntRuntime="true">
++    <javac destdir="${build.classes.dir}" includeAntRuntime="true" encoding="utf-8">
+       <src path="${build.gensrc.dir}"/>
+       <src path="${core.src.java.dir}"/>
+       <src path="${events.src.java.dir}"/>
+@@ -361,7 +361,7 @@ list of possible build targets.
+       <compilerarg value="-Xlint:cast"/> 
+     </javac>
+     <mkdir dir="${build.sandbox-classes.dir}"/>
+-    <javac destdir="${build.sandbox-classes.dir}" includeAntRuntime="true">
++    <javac destdir="${build.sandbox-classes.dir}" includeAntRuntime="true" encoding="utf-8">
+       <src path="${src.sandbox.dir}"/>
+       <patternset includes="**/*.java"/>
+       <patternset refid="exclude-jai"/>
+@@ -373,7 +373,7 @@ list of possible build targets.
+     </javac>
+   </target>
+   <target name="resourcegen" depends="compile-java">
+-    <javac destdir="${build.classes.dir}" includeAntRuntime="true">
++    <javac destdir="${build.classes.dir}" includeAntRuntime="true" encoding="utf-8">
+       <src path="${events.src.java.dir}"/>
+       <patternset includes="**/tools/Event*.java"/>
+       <classpath>
+@@ -447,7 +447,7 @@ list of possible build targets.
+   <!-- (src/java/org/apache/fop/hyphenation/classes.xml). -->
+   <!-- =================================================================== -->
+   <target name="codegen-hyphenation-classes">
+-    <javac destdir="${build.codegen-classes.dir}">
++    <javac destdir="${build.codegen-classes.dir}" encoding="utf-8">
+       <src path="${src.codegen.dir}/unicode/java"/>
+     </javac>
+     <java classname="org.apache.fop.hyphenation.UnicodeClasses" resultproperty="classes.result" classpath="${build.codegen-classes.dir}">
+@@ -647,7 +647,7 @@ list of possible build targets.
+     <mkdir dir="${build.unit.tests.dir}"/>
+     <mkdir dir="${build.dir}/test-gensrc"/>
+     <mkdir dir="${junit.reports.dir}"/>
+-    <javac destdir="${build.unit.tests.dir}" includeAntRuntime="true">
++    <javac destdir="${build.unit.tests.dir}" includeAntRuntime="true" encoding="utf-8">
+       <src path="${test.java.dir}"/>
+       <patternset refid="test-sources"/>
+       <classpath>
+@@ -1324,7 +1324,7 @@ NOTE:
+   <!-- =================================================================== -->
+   <target name="codegen-unicode" depends="compile-java">
+     <mkdir dir="${build.codegen-classes.dir}"/>
+-    <javac destdir="${build.codegen-classes.dir}">
++    <javac destdir="${build.codegen-classes.dir}" encoding="utf-8">
+       <src path="${src.codegen.dir}/unicode/java"/>
+       <classpath>
+         <path refid="libs-build-classpath"/>
+@@ -1338,7 +1338,7 @@ NOTE:
+   </target>
+   <target name="codegen-unicode-bidi" depends="compile-java">
+     <mkdir dir="${build.codegen-classes.dir}"/>
+-    <javac destdir="${build.codegen-classes.dir}" includeAntRuntime="true">
++    <javac destdir="${build.codegen-classes.dir}" includeAntRuntime="true" encoding="utf-8">
+       <src path="${src.codegen.dir}/unicode/java"/>
+       <classpath>
+         <path refid="libs-build-classpath"/>
+@@ -1365,7 +1365,7 @@ NOTE:
+   </target>
+   <target name="resgen-complexscripts" depends="compile-java">
+     <mkdir dir="${build.unit.tests.dir}"/>
+-    <javac destdir="${build.unit.tests.dir}" includeAntRuntime="true" memoryMaximumSize="1024m">
++    <javac destdir="${build.unit.tests.dir}" includeAntRuntime="true" memoryMaximumSize="1024m" encoding="utf-8">
+       <src path="${test.java.dir}/org/apache/fop/complexscripts/"/>
+       <classpath>
+         <path refid="libs-build-classpath"/>

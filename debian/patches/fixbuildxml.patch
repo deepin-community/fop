@@ -1,0 +1,17 @@
+Description: Null pointer exception at org.apache.fop.cli.InputHandler.transformTo
+ https://issues.apache.org/jira/browse/FOP-2461
+Author: Mathieu Malaterre <malat@debian.org>
+Forwarded: no
+
+Index: fop/fop/build.xml
+===================================================================
+--- fop.orig/fop/build.xml
++++ fop/fop/build.xml
+@@ -161,6 +161,7 @@ list of possible build targets.
+   <property name="javac.deprecation" value="on"/>
+   <property name="javac.source" value="1.7"/>
+   <property name="javac.target" value="1.7"/>
++  <property name="javac.encoding" value="utf-8"/>
+   <property name="javac.fork" value="no"/>
+   <property name="junit.fork" value="yes"/>
+   <property name="junit.haltonfailure" value="off"/>

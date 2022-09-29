@@ -1,0 +1,57 @@
+#!/usr/bin/make -f
+
+export JAVA_HOME=/usr/lib/jvm/default-java
+
+# unexport DISPLAY for so cowbuilder builds don't fail
+unexport DISPLAY
+
+%:
+	dh $@ --buildsystem=maven
+
+override_dh_auto_configure:
+	unzip -j -o debian/offo-hyphenation_v2.2.zip \
+		offo-hyphenation/hyph/\* -d fop/hyph/
+	dh_auto_configure 
+
+override_dh_auto_install:
+	cp -a debian/fop.sh debian/fop/usr/bin/fop
+	cp -a debian/fop-ttfreader.sh debian/fop/usr/bin/fop-ttfreader
+	cp -a debian/fop.1 fop/build/fop.1
+	pod2man --section=1 \
+		--release="Fop-TTFReader " \
+		debian/fop-ttfreader.pod > fop/build/fop-ttfreader.1
+	mkdir -p $(CURDIR)/debian/libfop-java/usr/share/fop/
+	cp -a $(CURDIR)/fop/build/fop-hyph.jar $(CURDIR)/debian/libfop-java/usr/share/fop/
+	-mkdir -p debian/fop-doc/usr/share/doc/fop-doc/html/api
+	cp -a fop/build/javadocs/* debian/fop-doc/usr/share/doc/fop-doc/html/api/
+	dh_auto_install
+
+override_dh_auto_build:
+	dh_auto_build -- -X package
+	mkdir -p fop/lib/build
+	cp $(CURDIR)/fop/target/fop-2.5.jar fop/lib/
+	# While the README mention those are deprecated build instructions it
+	# seems those targets have not been moved to the new maven build system
+	ant -f fop/build.xml -lib /usr/share/java/xmlgraphics-commons.jar:/usr/share/java/commons-logging.jar:/usr/share/java/commons-io.jar:/usr/share/java/batik-libs.jar:/usr/share/java/xml-apis-ext.jar:/usr/share/java/fontbox2.jar:/usr/share/java/servlet-api-3.1.jar jar-hyphenation
+	ant -f fop/build.xml -lib /usr/share/java/xmlgraphics-commons.jar:/usr/share/java/commons-logging.jar:/usr/share/java/commons-io.jar:/usr/share/java/batik-libs.jar:/usr/share/java/xml-apis-ext.jar:/usr/share/java/fontbox2.jar:/usr/share/java/servlet-api-3.1.jar javadocs
+
+debian/fop.1: debian/fop.1.in
+	help2man --no-info --version-option=-version --no-discard-stderr \
+	       	--include=$< --output=$@ ./debian/fop/usr/bin/fop
+	sed -i -e 's/^USAGE$$/.SH SYNOPSIS/' debian/fop.1
+	sed -i -e 's/^\[OPTIONS\]$$/.SH OPTIONS/' debian/fop.1
+	sed -i -e 's/^\[INPUT\]$$/.SH INPUT/' debian/fop.1
+	sed -i -e 's/^\[OUTPUT\]$$/.SH OUTPUT/' debian/fop.1
+	sed -i -e 's/^\[Examples\]$$/.SH EXAMPLES/' debian/fop.1
+	sed -i -e 's/^fop .*$$/\n&/' debian/fop.1
+
+override_dh_compress:
+	dh_compress -X.xconf
+
+override_dh_auto_clean:
+	dh_clean fop/build/
+	dh_clean fop/lib/
+	dh_clean fop/hyph/*.xml
+	dh_clean org/
+	dh_clean javac.sh
+	dh_auto_clean

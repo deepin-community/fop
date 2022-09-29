@@ -1,0 +1,23 @@
+Description: Fix a lintian issue: add class-path
+Author: Mathieu Malaterre <malat@debian.org>
+Forwarded: not-needed
+
+Index: fop-2.0/build.xml
+===================================================================
+--- fop-2.0.orig/build.xml
++++ fop-2.0/build.xml
+@@ -479,7 +479,7 @@ list of possible build targets.
+     <pathconvert property="manifest.classpath" dirsep="/" pathsep=" " refid="libs-build-classpath">
+       <map from="${basedir}${file.separator}lib${file.separator}" to=""/>
+     </pathconvert>
+-    <jar jarfile="${build.dir}/fop.jar" basedir="${build.classes.dir}">
++    <jar jarfile="${build.dir}/fop.jar" basedir="${build.classes.dir}" manifest="${basedir}/fop.mf">
+       <manifest>
+         <attribute name="Main-Class" value="org.apache.fop.cli.Main"/>
+         <attribute name="Build-Id" value="${ts} (${user.name} [${os.name} ${os.version} ${os.arch}, Java ${java.runtime.version}, Target Java ${javac.target}])"/>
+Index: fop-2.0/fop.mf
+===================================================================
+--- /dev/null
++++ fop-2.0/fop.mf
+@@ -0,0 +1 @@
++Class-Path: xercesImpl.jar xalan2.jar bsf.jar batik.jar commons-io.jar commons-logging.jar xmlgraphics-commons.jar xml-commons-external.jar

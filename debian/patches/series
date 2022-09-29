@@ -1,0 +1,12 @@
+#04_fixqdoxbuildfailure.patch
+fixbuildxml.patch
+hyph_stacksize.patch
+strip_user_host_from_manifest.patch
+javadoc_encoding.patch
+javadoc_allow-script-in-comments.patch
+java9.patch
+removejai.patch
+jar-hyph.patch
+jdk11compfix.patch
+avalon-framework.patch
+0001-PDFInfo.java-Support-SOURCE_DATE_EPOCH-environment-v.patch

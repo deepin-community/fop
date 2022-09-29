@@ -1,0 +1,13 @@
+OFFO
+----
+
+When updating fop, you'll need to make sure to keep in sync with offo project.
+
+You'll need to download the latest source offo zip from:
+
+https://sourceforge.net/projects/offo/files/offo-hyphenation/
+
+Pay attention that you need to download the source zip file (hyph/*.xml), not
+the binary distribution containing the fop-hyph.jar file
+
+ -- Mathieu Malaterre <malat@debian.org>  Tue, 02 Feb 2016 08:30:40 +0100
